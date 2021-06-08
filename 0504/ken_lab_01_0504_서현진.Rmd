@@ -1,0 +1,62 @@
+---
+title: "ken_lab_01_0504_서현진"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+
+#서현진
+
+setwd()
+#문제1] 0_group.csv 파일을 열어서 group_df로 저장
+group_df<-read.csv('0_group.csv')
+
+#문제2]group_df 6개 정도 데이터 확인
+head(group_df)
+
+#문제3]group_df 데이터 속성 확인
+str(group_df)
+
+#문제4] 각 변수들 간의 관계를 확인 할 수 있는
+# 상관관계 분석을 나타내어라.# 명령어 입력
+cor(group_df)
+
+
+#문제5]상관관계 결과 보고 각 변수에 대한 해석
+# 설명이 필요해요
+
+# age 와 group과의 상관계수는 0.1564699으로 약한 양의 상관관계를 갖는다.
+# group과 성별sex는 상관계수가 -0.2041241 으로 약한 음의 상관관계를 갖는다. 
+# group과 level의 상관계수는 0.3869856으로 약한 양의 상관관계를 갖는다.
+# 나이 age와 성별 sex는 0.3719381의 상관계수를 가지므로 약한 양의 상관관계를 갖는다.
+# 나이age와 level은 0.1827828의 상관계수를 가지므로 약한 양의 상관관계를 갖는다.
+# 성별sex와 level은 0.2325290 의 상관계수를 가지므로 약한 양의 상관관계를 갖는다.
+# 즉, group과 age와, level 은 서로 비례하나, sex와 group끼리는 서로 반비례하는 성향이 있다.
+
+
+
+# 문제6]group에 따른 level 결과를 회귀식을 완성하여 group_lm으로 저장
+
+lm(data= group_df, level ~ group )
+group_lm <-lm(data= group_df, level ~ group )  #1) 리니어모델하기
+group_lm
+summary(group_lm) #2) summary하기
+par(mfrow = c(2,2))
+plot(group_lm)  #3) plot하기
+
+
+# 문제7]회기식에 대한 해석
+# 결정계수가 0.1498로 0에 가까우므로 설명력이 좋다고 보기는 어렵다.
+# t통계량에 대한 p-value가 0.0419로 0.05보다 작으므로 회기계수 추정치가 유의하다.
+# level = 20.286*group -2.857 로 회기식을 도출할 수 있다.
+# 즉, group이 1 증가하면 약 20배 만큼 level이 증가한다고 볼수 있다.
+#
+
+
+
+
+```
+

@@ -1,0 +1,53 @@
+---
+title: "ken_lab_07_0429_서현진"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+
+
+############QUIZ] 위 데이터로 워드클라우드 만드세요
+
+movie_data<-read.csv('movie_ex.csv')
+head(movie_data[,2],2)
+movie_data2<-movie_data[,2]
+
+movie_data2<-unique(movie_data2)
+
+movie_data3 <- str_replace_all(movie_data2, '[^[:alpha:][:blank:]]','')
+# head(movie_data3)
+
+library(KoNLP)
+
+movie_data3<-extractNoun(movie_data3)
+
+movie_data3<- lapply(movie_data3,unique) #한 행에서 중복되는 단어를 제거 
+
+#리스트 풀기
+movie_data3<- unlist(movie_data3)
+movie_data4<- Filter(function(x){nchar(x) <= 10 & nchar(x)>1}, movie_data3)
+
+movie_data4<- gsub('\\^','',movie_data4)  # ^제거
+
+#불용어 제거
+txt <- readLines('movie_불용어.txt') #txt
+cnt_txt <- length(txt) # ;cnt_txt
+
+#불용어리스트값에 있는 값을 제거
+for(i in 1:cnt_txt){
+  movie_data4<- gsub((txt[i]),"",movie_data4)
+} #for문을 i가 1,2,3,4,5일때 총 5번 반복함
+
+
+wordcount <- table(movie_data4)
+wordcount <- head(sort(wordcount,decreasing=T),30)
+wordcount
+
+library(wordcloud2)
+wordcloud2(wordcount)
+
+```
+

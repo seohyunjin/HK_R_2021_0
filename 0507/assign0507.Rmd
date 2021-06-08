@@ -1,0 +1,62 @@
+---
+title: "ken_lab_0507_서현진"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+#과제 제출용
+library(readxl)
+library(dplyr)
+library(psych)
+
+setwd('C:\\Users\\CPB06GameN\\Documents\\practice1_0419\\hankyungr')
+perioddata <-read_excel('period(0506).xlsx')
+head(perioddata)
+period_anal<- perioddata %>% filter(측정소명 %in% c('성북구','중구'))
+# View(period_anal)
+period_anal
+
+
+count(period_anal,날짜) %>% arrange(desc(n))
+count(period_anal,측정소명) %>% arrange(desc(n))
+
+period_anal_area_sb <-subset(period_anal, 측정소명 =='성북구')
+period_anal_area_sb
+
+period_anal_area_sb2 <-subset(period_anal, 측정소명 =='중구')
+period_anal_area_sb2
+
+
+describe(period_anal_area_sb $`미세먼지 PM10\r\n(㎍/m3)`)
+describe(period_anal_area_sb2 $`미세먼지 PM10\r\n(㎍/m3)`)
+
+#이상치 제거
+period_anal_area_sb $`미세먼지 PM10\r\n(㎍/m3)`<- 
+        ifelse(period_anal_area_sb $`미세먼지 PM10\r\n(㎍/m3)` >=150, NA, 
+               period_anal_area_sb $`미세먼지 PM10\r\n(㎍/m3)`)
+
+period_anal_area_sb2 $`미세먼지 PM10\r\n(㎍/m3)`<- 
+        ifelse(period_anal_area_sb2 $`미세먼지 PM10\r\n(㎍/m3)` >=150, NA, 
+               period_anal_area_sb2 $`미세먼지 PM10\r\n(㎍/m3)`)
+
+ls(period_anal_area_sb)
+boxplot(period_anal_area_sb$'미세먼지 PM10\r\n(㎍/m3)',
+        period_anal_area_sb2$'미세먼지 PM10\r\n(㎍/m3)', 
+        main= '미세먼지 비교',
+        xlab= "측정소명",
+        names =c('성북구','중구'),
+        ylab= '미세먼지량',
+        col=c('lightblue','lightgreen'))
+
+
+ls(period_anal)
+names(period_anal) <-c('date','area','finedust','fineparticulate','O3','NO2','CO','SO2')
+head(period_anal)
+t.test(data=period_anal,finedust~area,var.equal=T)
+#p-value가 0.05보다 크므로 유의하다 
+
+```
+
